@@ -4,38 +4,25 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Button
-import android.view.View.OnClickListener
-import android.view.View
-import winterwell.jtwitter.Twitter
 import android.util.Log
-import android.os.StrictMode
+import com.marakana.utils.TwitterAPI
 
-class StatusActivity extends Activity implements OnClickListener
+class StatusActivity extends Activity
 {
-  val TAG = "StatusActivity"
-  var EditText editText
-  var Button updateButton
-  var twitter = new Twitter("student", "password")
+  val twitter = new TwitterAPI
 
   override onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_status)
     
-    val policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-    StrictMode.setThreadPolicy(policy);
+    val editText     = findViewById(R.id.editText) as EditText
+    val updateButton =  findViewById(R.id.buttonUpdate) as Button
     
-    editText     = findViewById(R.id.editText) as EditText
-    updateButton =  findViewById(R.id.buttonUpdate) as Button
-    
-    updateButton.setOnClickListener(this)
-
-    twitter.setAPIRootUrl("http://yamba.marakana.com/api")
-  }
-
-  override onClick(View arg0)
-  {
-  	twitter.setStatus(editText.getText.toString)
-    Log.d(TAG, "onClicked")
+    updateButton.setOnClickListener = [ 
+    	                                val twitterPoster = new TwitterPoster(twitter, this)
+                                        twitterPoster.execute(editText.getText().toString())
+                                        Log.d("YAMBA", "onClicked") 
+                                      ]
   }
 }
