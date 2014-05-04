@@ -4,29 +4,27 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Button
-import android.util.Log
-import com.marakana.utils.TwitterAPI
 import android.view.Menu
 import android.view.MenuItem
 import android.content.Intent
+import android.view.View.OnClickListener
 
 class StatusActivity extends Activity
 {
-  val twitter = new TwitterAPI
+  var EditText       editText
+  var Button         updateButton
+  
+  var update       = [ new TwitterPoster(this).execute(editText.getText.toString)  ] as OnClickListener
 
   override onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_status)
+        
+    editText     = findViewById(R.id.editText) as EditText
+    updateButton = findViewById(R.id.buttonUpdate) as Button
     
-    val editText     = findViewById(R.id.editText) as EditText
-    val updateButton =  findViewById(R.id.buttonUpdate) as Button
-    
-    updateButton.setOnClickListener = [ 
-    	                                val twitterPoster = new TwitterPoster(twitter, this)
-                                        twitterPoster.execute(editText.getText().toString())
-                                        Log.d("YAMBA", "onClicked") 
-                                      ]
+    updateButton.setOnClickListener = update   
   }
   
   override  onCreateOptionsMenu(Menu menu)

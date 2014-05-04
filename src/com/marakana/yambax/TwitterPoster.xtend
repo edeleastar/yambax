@@ -6,15 +6,16 @@ import winterwell.jtwitter.TwitterException
 import android.widget.Toast
 import android.app.Activity
 import com.marakana.utils.TwitterAPI
- 
+
 class TwitterPoster extends AsyncTask<String, Integer, String>
 {
-  var TwitterAPI twitter
-  var Activity activity
-
-  new(TwitterAPI twitter, Activity activity)
+  val TwitterAPI twitter
+  val Activity activity 
+ 
+  new(Activity activity)
   {
-    this.twitter = twitter
+    var app = activity.getApplication() as YambaApplication
+    this.twitter = app.twitter
     this.activity = activity
   }
 
