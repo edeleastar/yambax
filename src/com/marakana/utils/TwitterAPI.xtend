@@ -27,4 +27,9 @@ class TwitterAPI
     val result = twitter.updateStatus(status)
     result.text
   }
+  
+  def getFriendsTimeline()
+  {
+    return twitter.getFriendsTimeline()
+  }
 }
