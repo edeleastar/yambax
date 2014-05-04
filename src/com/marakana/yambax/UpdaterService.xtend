@@ -2,36 +2,33 @@ package com.marakana.yambax
 
 import android.content.Intent
 import java.util.List
-import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.Twitter
+import winterwell.jtwitter.Twitter.Status
 import com.marakana.utils.TwitterAPI
 import winterwell.jtwitter.TwitterException
 import android.util.Log
 import com.marakana.utils.BackgroundService
-import android.content.ContentValues
+import android.os.Looper
+import android.os.Handler
 
 class UpdaterService extends BackgroundService
 {
-  var TwitterAPI twitter
-  var StatusData statusData
-  var count = 0;
-  
-  override onBind(Intent intent)
-  {
-    null
-  } 
+  var YambaApplication app
+  var TwitterAPI       twitter
+  var Iterable<Status> newTweets 
 
   override onCreate()
   {
     super.onCreate
-    var app = getApplication() as YambaApplication
-    this.twitter = app.twitter
-    statusData = new StatusData(this)
+    app        = getApplication as YambaApplication
+    twitter    = app.twitter
   }
 
   override onStartCommand(Intent intent, int flags, int startId)
   {
     super.onStartCommand(intent, flags, startId)
     startBackgroundTask
+    app.serviceRunning = true
     START_STICKY;
   }
 
@@ -39,34 +36,24 @@ class UpdaterService extends BackgroundService
   {
     super.onDestroy
     stopBackgroundTask
+    app.serviceRunning = false
   }
   
   override def void doBackgroundTask()
   {
     try
     {
-      val values                         = new ContentValues
       val List<Twitter.Status> timeline  = twitter.getFriendsTimeline
-      val long latestStatusCreatedAtTime = statusData.getLatestStatusCreatedAtTime
-      count = 0;
-      timeline.forEach[ values.put(StatusDataTypes.C_ID, getId)
-                        val createdAt = getCreatedAt.getTime
-                        values.put(StatusDataTypes.C_CREATED_AT, createdAt)
-                        values.put(StatusDataTypes.C_TEXT, getText)
-                        values.put(StatusDataTypes.C_USER, getUser.getName)
-                        Log.d("YAMBA", "Got update with id " + getId + ". Saving")
-                        statusData.insertOrIgnore(values)
-                        count = if (latestStatusCreatedAtTime < createdAt) count + 1 else count   ]
-                        
-      Log.d("YAMBA", if (count > 0) "Got " + count + " status updates" else "No new status updates");
+      newTweets = if (app.timeline.size == 0) timeline else timeline.filter [it.id > app.timeline.get(0).id]
+
+      Log.e("YAMBA", "number of new tweets= " + newTweets.size)       
+      val handler = new Handler(Looper.getMainLooper)      
+      
+      handler.post ([| app.updateTimeline(newTweets)])
     }
     catch (TwitterException e)
     {
       Log.e("YAMBA", "Failed to connect to twitter service", e); 
-    }
-    catch (Exception e)    
-    {
-      Log.d("YAMBA", "Data base error: " + e.getMessage())
     }
   }
 

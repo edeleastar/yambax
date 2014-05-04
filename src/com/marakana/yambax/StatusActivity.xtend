@@ -1,19 +1,14 @@
 package com.marakana.yambax
 
-import android.app.Activity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Button
-import android.view.Menu
-import android.view.MenuItem
-import android.content.Intent
 import android.view.View.OnClickListener
 
-class StatusActivity extends Activity
+class StatusActivity extends  BaseActivity 
 {
   var EditText       editText
   var Button         updateButton
-  
   var update       = [ new TwitterPoster(this).execute(editText.getText.toString)  ] as OnClickListener
 
   override onCreate(Bundle savedInstanceState)
@@ -25,22 +20,5 @@ class StatusActivity extends Activity
     updateButton = findViewById(R.id.buttonUpdate) as Button
     
     updateButton.setOnClickListener = update   
-  }
-  
-  override  onCreateOptionsMenu(Menu menu)
-  {
-    getMenuInflater.inflate(R.menu.menu, menu)
-    true
-  }
-  
-  override onOptionsItemSelected(MenuItem item)
-  {
-    switch (item.getItemId())
-    {
-      case R.id.itemServiceStart: startService (new Intent(this, typeof(UpdaterService)))
-      case R.id.itemServiceStop:  stopService  (new Intent(this, typeof(UpdaterService)))
-      case R.id.itemPrefs:        startActivity(new Intent(this, typeof(PrefsActivity)))
-    }
-   true
   }
 }
