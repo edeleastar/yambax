@@ -15,4 +15,7 @@
   <string name="summaryUsername">Please enter your username</string>
   <string name="summaryPassword">Please enter your password</string>
   <string name="summaryApiRoot">URL of Root API for your service</string>
+  
+  <string name="titleServiceStop">Stop Service</string>
+  <string name="titleServiceStart">Start Service</string>
 </resources>

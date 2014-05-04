@@ -27,6 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.marakana.yambax.PrefsActivity" android:label="@string/titlePrefs" />
+        
+        <service android:name="com.marakana.yambax.UpdaterService" />
     </application>
 
 

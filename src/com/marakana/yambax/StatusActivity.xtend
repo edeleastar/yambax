@@ -33,9 +33,14 @@ class StatusActivity extends Activity
     true
   }
   
-   override onOptionsItemSelected(MenuItem item)
+  override onOptionsItemSelected(MenuItem item)
   {
-  	startActivity(new Intent(this, typeof(PrefsActivity)))
-    true
+    switch (item.getItemId())
+    {
+      case R.id.itemServiceStart: startService (new Intent(this, typeof(UpdaterService)))
+      case R.id.itemServiceStop:  stopService  (new Intent(this, typeof(UpdaterService)))
+      case R.id.itemPrefs:        startActivity(new Intent(this, typeof(PrefsActivity)))
+    }
+   true
   }
 }
