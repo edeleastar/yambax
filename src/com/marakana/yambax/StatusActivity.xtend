@@ -6,6 +6,9 @@ import android.widget.EditText
 import android.widget.Button
 import android.util.Log
 import com.marakana.utils.TwitterAPI
+import android.view.Menu
+import android.view.MenuItem
+import android.content.Intent
 
 class StatusActivity extends Activity
 {
@@ -24,5 +27,17 @@ class StatusActivity extends Activity
                                         twitterPoster.execute(editText.getText().toString())
                                         Log.d("YAMBA", "onClicked") 
                                       ]
+  }
+  
+  override  onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater.inflate(R.menu.menu, menu)
+    true
+  }
+  
+   override onOptionsItemSelected(MenuItem item)
+  {
+  	startActivity(new Intent(this, typeof(PrefsActivity)))
+    true
   }
 }
