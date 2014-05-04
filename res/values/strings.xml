@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
   <string name="app_name">Yamba X</string>
   <string name="titleYamba">Yamba</string>
   <string name="titleStatus">Status Update</string>
@@ -18,4 +16,9 @@
   
   <string name="titleServiceStop">Stop Service</string>
   <string name="titleServiceStart">Start Service</string>
+  
+  <string name="titleTimeline">Timeline</string> 
+  <string name="msgAllDataPurged">All data has been purged</string>
+  <string name="titlePurge">Purge Data</string>
 </resources>
+ 
