@@ -12,7 +12,27 @@ import java.util.LinkedList
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.util.Log
 
+class NetworkReceiver extends BroadcastReceiver 
+{ 
+  override onReceive(Context context, Intent intent) 
+  {
+    val isNetworkDown = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false); 
+    
+    if (isNetworkDown) 
+    {
+      Log.d("YAMBA", "onReceive: NOT connected, stopping UpdaterService");
+      context.stopService(new Intent(context, typeof(UpdaterService)))
+    }
+    else 
+    {
+      Log.d("YAMBA", "onReceive: connected, starting UpdaterService");
+      context.startService(new Intent(context, typeof(UpdaterService)))
+    }
+  }
+}
 
 class BootReceiver extends BroadcastReceiver
 {

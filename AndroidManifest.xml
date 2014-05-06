@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS" />
     <uses-permission android:name="com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     <permission android:name="com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS"
       android:label="@string/send_timeline_notifications_permission_label"
@@ -43,17 +44,18 @@
       <activity android:name="com.marakana.yambax.PrefsActivity"  android:label="@string/titlePrefs" />  
       <service  android:name="com.marakana.yambax.UpdaterService" />
 
-      <!--  -<receiver android:name="com.marakana.yambax.BootReceiver">
+     <!-- removed to simplify debugging
+      <receiver android:name="com.marakana.yambax.BootReceiver">
         <intent-filter>
           <action android:name="android.intent.action.BOOT_COMPLETED" />
         </intent-filter> 
-      </receiver>  -->
+      </receiver> -->
       
-      
-    
-      
+      <receiver android:name="com.marakana.yambax.NetworkReceiver">
+        <intent-filter>
+          <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+        </intent-filter>
+      </receiver>
     </application>
-
-
     
 </manifest>
