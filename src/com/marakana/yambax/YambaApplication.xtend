@@ -9,16 +9,27 @@ import java.util.List
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
 import java.util.LinkedList
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 
 interface TimelineUpdateListener
 {
   def void timelineUpdate()
 }
+  
+class BootReceiver extends BroadcastReceiver
+{
+  override onReceive(Context context, Intent intent) 
+  {
+    context.startService(new Intent(context, typeof(UpdaterService)))
+  }
+} 
  
 class YambaApplication extends Application
 {
   @Property TwitterAPI             twitter        = new TwitterAPI("student", "password", "http://yamba.marakana.com/api")
-  @Property boolean                serviceRunning = false
+  @Property boolean                serviceRunning = true
   @Property List<Twitter.Status>   timeline       = new LinkedList<Status>
   @Property TimelineUpdateListener updateListener
 
