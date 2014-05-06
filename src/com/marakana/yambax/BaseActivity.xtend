@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 
+
 interface Command
 {
   def void doCommand()
@@ -20,11 +21,11 @@ class BaseActivity extends Activity
                                               .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)) ] as Command
   
   val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
-                          if (app.isServiceRunning)
+                          if (YambaApplication.serviceRunning)
                             stopService(intent)
                            else
                             startService(intent) 
-                          app.serviceRunning = !app.serviceRunning] as Command
+                          YambaApplication.serviceRunning = !YambaApplication.serviceRunning] as Command
   
   val purge         = [ | app.clearTimeline
                           Toast.makeText(this, R.string.msgAllDataPurged, Toast.LENGTH_LONG).show() ] as Command
@@ -64,8 +65,8 @@ class BaseActivity extends Activity
   override onMenuOpened(int featureId, Menu menu)
   { 
     val toggleItem = menu.findItem(R.id.itemToggleService)
-    toggleItem.title = if (app.isServiceRunning) R.string.titleServiceStop         else R.string.titleServiceStart
-    toggleItem.icon  = if (app.isServiceRunning) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
+    toggleItem.title = if (YambaApplication.serviceRunning) R.string.titleServiceStop         else R.string.titleServiceStart
+    toggleItem.icon  = if (YambaApplication.serviceRunning) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
     true
   }   
 }

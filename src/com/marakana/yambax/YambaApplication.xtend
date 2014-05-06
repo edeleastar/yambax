@@ -23,13 +23,19 @@ class NetworkReceiver extends BroadcastReceiver
     
     if (isNetworkDown) 
     {
-      Log.d("YAMBA", "onReceive: NOT connected, stopping UpdaterService");
-      context.stopService(new Intent(context, typeof(UpdaterService)))
+      if (YambaApplication.serviceRunning)
+      {
+        Log.d("YAMBA", "onReceive: NOT connected, stopping UpdaterService");
+        context.stopService(new Intent(context, typeof(UpdaterService)))
+      }
     }
     else 
     {
-      Log.d("YAMBA", "onReceive: connected, starting UpdaterService");
-      context.startService(new Intent(context, typeof(UpdaterService)))
+      if (!YambaApplication.serviceRunning)
+      {
+        Log.d("YAMBA", "onReceive: connected, starting UpdaterService");
+        context.startService(new Intent(context, typeof(UpdaterService)))
+      }
     }
   }
 }
@@ -44,8 +50,8 @@ class BootReceiver extends BroadcastReceiver
  
 class YambaApplication extends Application
 {
+  public static boolean            serviceRunning = false
   @Property TwitterAPI             twitter        = new TwitterAPI("student", "password", "http://yamba.marakana.com/api")
-  @Property boolean                serviceRunning = false
   @Property List<Twitter.Status>   timeline       = new LinkedList<Status>
 
   var prefsChanged = [ SharedPreferences prefs, String s |

@@ -30,7 +30,7 @@ class UpdaterService extends BackgroundService
   {
     super.onStartCommand(intent, flags, startId)
     startBackgroundTask
-    app.serviceRunning = true
+    YambaApplication.serviceRunning = true
     START_STICKY;
   }
 
@@ -38,7 +38,7 @@ class UpdaterService extends BackgroundService
   {
     super.onDestroy
     stopBackgroundTask
-    app.serviceRunning = false
+    YambaApplication.serviceRunning = false
   }
   
   override def void doBackgroundTask()
