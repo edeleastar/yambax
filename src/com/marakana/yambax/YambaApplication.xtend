@@ -13,11 +13,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
-interface TimelineUpdateListener
-{
-  def void timelineUpdate()
-}
-  
+
 class BootReceiver extends BroadcastReceiver
 {
   override onReceive(Context context, Intent intent) 
@@ -29,9 +25,8 @@ class BootReceiver extends BroadcastReceiver
 class YambaApplication extends Application
 {
   @Property TwitterAPI             twitter        = new TwitterAPI("student", "password", "http://yamba.marakana.com/api")
-  @Property boolean                serviceRunning = true
+  @Property boolean                serviceRunning = false
   @Property List<Twitter.Status>   timeline       = new LinkedList<Status>
-  @Property TimelineUpdateListener updateListener
 
   var prefsChanged = [ SharedPreferences prefs, String s |
                        twitter.changeAccount(prefs)  ]  as OnSharedPreferenceChangeListener
@@ -51,12 +46,10 @@ class YambaApplication extends Application
   def updateTimeline(Iterable<Twitter.Status> newTweets)
   {
     newTweets.forEach[timeline.add(0, it)]
-    updateListener?.timelineUpdate
   }
   
   def clearTimeline()
   {
     timeline.clear
-    updateListener?.timelineUpdate
   }
 }

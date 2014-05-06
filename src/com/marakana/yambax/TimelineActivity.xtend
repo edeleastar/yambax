@@ -13,18 +13,39 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.content.Intent
 
-class TimelineActivity extends BaseActivity
+class TimelineReceiver extends BroadcastReceiver
 {
-  var TimelineAdapter timelineAdapter
-  var timelineUpdate = [| timelineAdapter.notifyDataSetChanged ] as TimelineUpdateListener
+  var TimelineActivity timelineActivity
+  
+  new (TimelineActivity activity)
+  {
+  	timelineActivity = activity;
+  }
+  
+  override onReceive(Context context, Intent intent) 
+  {
+  	timelineActivity.timelineAdapter.notifyDataSetChanged
+  }
+}  
+ 
+class TimelineActivity extends BaseActivity
+{  
+  @Property TimelineAdapter timelineAdapter
+  var TimelineReceiver receiver
+  var IntentFilter     filter
   
   override onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.timeline)
     timelineAdapter    = new TimelineAdapter(this, R.layout.row, app.timeline)
-    app.updateListener = timelineUpdate
+    
+    receiver = new TimelineReceiver (this)
+    filter   = new IntentFilter( UpdaterService.NEW_STATUS_INTENT )
   }
    
   override onStart()
@@ -32,6 +53,18 @@ class TimelineActivity extends BaseActivity
     super.onStart    
     val listTimeline = findViewById(R.id.listTimeline) as ListView
     listTimeline.setAdapter(timelineAdapter);
+  }
+  
+  override onResume()
+  {
+  	super.onResume
+    super.registerReceiver(receiver, filter, UpdaterService.SEND_TIMELINE_NOTIFICATIONS, null);
+  }
+  
+  override onPause() 
+  {
+    super.onPause();
+    unregisterReceiver(receiver) 
   }
 }
 

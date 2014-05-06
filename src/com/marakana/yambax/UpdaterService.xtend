@@ -8,11 +8,13 @@ import com.marakana.utils.TwitterAPI
 import winterwell.jtwitter.TwitterException
 import android.util.Log
 import com.marakana.utils.BackgroundService
-import android.os.Looper
-import android.os.Handler
-
+ 
 class UpdaterService extends BackgroundService
 {
+  public static final String NEW_STATUS_INTENT              = "com.marakana.yamba.NEW_STATUS"
+  public static final String SEND_TIMELINE_NOTIFICATIONS    = "com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS";
+  public static final String RECEIVE_TIMELINE_NOTIFICATIONS = "com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS"
+  
   var YambaApplication app
   var TwitterAPI       twitter
   var Iterable<Status> newTweets 
@@ -45,16 +47,15 @@ class UpdaterService extends BackgroundService
     {
       val List<Twitter.Status> timeline  = twitter.getFriendsTimeline
       newTweets = if (app.timeline.size == 0) timeline else timeline.filter [it.id > app.timeline.get(0).id]
-
-      Log.e("YAMBA", "number of new tweets= " + newTweets.size)       
-      val handler = new Handler(Looper.getMainLooper)      
+      Log.e("YAMBA", "number of new tweets= " + newTweets.size)      
       
-      handler.post ([| app.updateTimeline(newTweets)])
+      app.updateTimeline(newTweets)
+      sendBroadcast(new Intent(NEW_STATUS_INTENT), RECEIVE_TIMELINE_NOTIFICATIONS);      
+      
     }
     catch (TwitterException e)
     {
       Log.e("YAMBA", "Failed to connect to twitter service", e); 
     }
   }
-
 }

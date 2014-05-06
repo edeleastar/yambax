@@ -22,8 +22,9 @@ class BaseActivity extends Activity
   val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
                           if (app.isServiceRunning)
                             stopService(intent)
-                          else
-                            startService(intent) ] as Command
+                           else
+                            startService(intent) 
+                          app.serviceRunning = !app.serviceRunning] as Command
   
   val purge         = [ | app.clearTimeline
                           Toast.makeText(this, R.string.msgAllDataPurged, Toast.LENGTH_LONG).show() ] as Command
