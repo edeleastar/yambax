@@ -77,5 +77,6 @@ class YambaApplication extends Application
   def clearTimeline()
   {
     timeline.clear
+    sendBroadcast(new Intent(UpdaterService.NEW_STATUS_INTENT), UpdaterService.RECEIVE_TIMELINE_NOTIFICATIONS);   
   }
 }
